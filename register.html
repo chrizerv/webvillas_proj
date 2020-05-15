@@ -6,10 +6,11 @@
 	<meta http-equiv="Expires" content="0" />
 	<meta charset="utf-8" />
 	<title>Register</title>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
- <form id="userdata" name="userdata" action="2.php" method="post" onsubmit="return validate_form();" >
+ <form id="userdata" name="userdata" action="con_register.php" method="post" onsubmit="return true" >
     <!-- θα φτιάξουμε τη ζητούμενη διάταξη με πίνακα 2 στηλών - αριστερά θα
          μπούν τα ονόματα πεδίων και δεξιά τα στοιχεία διεπαφής για φόρμες -->
     <!-- Τα right aligned labels μπορεί να γίνουν και με label tags και CSS
@@ -43,8 +44,17 @@
         <td>
           <input type="text" name="email" id="email" size="30" maxlength="100" />
         </td>
-      </tr>      
+      </tr>
+      <tr> 
+      <td>     
+     		<div class="g-recaptcha" data-sitekey="6LcepfcUAAAAAEphOOV1aA66VLyqL2xyEQBleamp"></div>
+      </td>
+      </tr>
       <tr>
+      	<td>
+      		<button name="submit" type="submit" id="submit" value="Αποστολή">Αποστολή</button>
+      	</td>
+      </tr> 
     </table>
   </form>
 
