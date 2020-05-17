@@ -1,56 +1,6 @@
 <?php
 
- //Στέλνουμε με POST request το response token μαζί με το secret_key στην Google για να επιβεβαιώσουμε 
- // ότι, he is not a robot :D !
-function validate_recaptcha($captcha_token){
-
-//Χρησιμοποιούμε το cURL 
-
-	//Ετοιμάζουμε τα fields όπως τα ζητά το API.. 
-
-	$url = 'https://www.google.com/recaptcha/api/siteverify';
-	$fields = array(
-	'secret' => urlencode('6LcepfcUAAAAAHQIJdNSxzLeyBghZ9uxXM9hR9Dm'),
-	'response' => urlencode($captcha_token)
-	);
-
-	// Προετιμασία (λεγόμενη url-ify ) για POST method
-	foreach($fields as $key=>$value) 
-		$fields_string .= $key.'='.$value.'&';
-	
-	$fields_string=rtrim($fields_string, '&');
-    
-
-    // Αρχικοποίηση, πέρασμα url , num of fields και post data 
-    $ch = curl_init();
-    
-    curl_setopt($ch,CURLOPT_URL, $url);
-    curl_setopt($ch,CURLOPT_POST, count($fields));
-    curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER, True);
-
-    // Εκτέλεση του post
-    $result = curl_exec($ch);
-    
-    // Τερματισμός του curl
-    curl_close($ch);
-
-    // Η Google μας επιστρέφει σε JSON μια μεταβλητή success και έτσι γνωρίζουμε την αλήθεια !
-    $result = json_decode($result,true);
-   
-    if(isset($result))
-    	return $result['success'];
-    else
-    	return false;
-
-}
-
-
-function terminate(){
-	header('HTTP/1.0 401 Unauthorized');
-    exit();
-}
-
+require 'functions.php';
 
 
 //Προχωράμε άν και μόνο άν, έχουν σταλθεί ΟΛΑ τα πεδία!
@@ -88,6 +38,56 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['email']) ) {
 	if ( !validate_recaptcha($captcha_token) )
 		terminate();
 
+   $random_vfcode = md5(random_int(00000,99999).' '.rand());
+
+
+   $enc_password = crypt($password,'$6$rounds=5000$w6tLIsFTm4PKuXaC$');
+
+ 
+     
+    $result=false;
+     
+
+	 require('db_params.php');
+  try {
+
+  	 $pdoObject = new PDO("mysql:host=$dbhost; dbname=$dbname;", $dbuser, $dbpass);
+     $pdoObject -> exec('set names utf8');
+
+     /*  Exception mode is also useful because you can structure your error handling more clearly than with traditional PHP-style warnings, and with less code/nesting than by running in silent mode and explicitly checking the return value of each database call. 
+     */
+
+     $pdoObject -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+     $sql='INSERT INTO user (username, password, email, vfcode)
+            VALUES (:username, :password, :email, :vfcode)';
+
+      $statement = $pdoObject->prepare($sql);
+      
+      $result= $statement->execute( array(       ':username'=>$username,
+                                                 ':password'=>$enc_password,
+                                                 ':email'=>$email,
+                                                 ':vfcode'=>$random_vfcode  ) );
+
+
+
+     $statement->closeCursor();
+     $pdoObject = null;
+      } catch (PDOException $e) {
+      		echo $e->getMessage();
+      }
+     
+    if (!$result)
+    	terminate();
+    else
+    	echo 'H εγγραφή σας ήτανε επιτυχής.<br>';
+
+    if ( !send_mail($email,
+    				'WebVillas - Account Activation',
+    				'Click <a href=http://172.17.0.3/kokor_2020/activate.php?vfcode='.$random_vfcode.'>here</a> to activate your account.') )
+    	terminate();
+    else
+    	echo '<br>Σας έχει σταλεί email για την ενεργοποίηση του λογαριασμού σας.';
 
 }
 
