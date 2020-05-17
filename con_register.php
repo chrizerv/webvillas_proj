@@ -3,8 +3,8 @@
 require 'functions.php';
 
 
-//Προχωράμε άν και μόνο άν, έχουν σταλθεί ΟΛΑ τα πεδία!
-if ( isset($_POST['username'], $_POST['password'], $_POST['email']) ) {
+//Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία!
+if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-recaptcha-response']) ) {
 	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
