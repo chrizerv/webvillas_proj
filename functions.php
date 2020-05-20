@@ -63,7 +63,7 @@ function validate_recaptcha($captcha_token){
 
 function send_mail($to, $subject, $body){
 
-	require 'PHPMailerAutoload.php';
+	require 'phpmailer/PHPMailerAutoload.php';
 
 	$mail = new PHPMailer;
 
@@ -72,12 +72,12 @@ function send_mail($to, $subject, $body){
 	$mail->isSMTP();                                      // Set mailer to use SMTP
 	$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 	$mail->SMTPAuth = true;                               // Enable SMTP authentication
-	$mail->Username =                // SMTP username
-	$mail->Password =                           // SMTP password
+	$mail->Username = 'Το USERNAME μου'               // SMTP username
+	$mail->Password = 'Το password μου'                         // SMTP password
 	$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 	$mail->Port = 587;                                    // TCP port to connect to
 
-	$mail->setFrom('drsperker@gmail.com', 'Chri Zerv');
+	$mail->setFrom('ΤΟ_ΔΙΚΟ_ΜΟΥ_EMAIL@gmail.com', 'Το όνομά μου');
 	$mail->addAddress($to);     // Add a recipient
 	//$mail->addAddress('ellen@example.com');               // Name is optional
 	//$mail->addReplyTo('info@example.com', 'Information');
