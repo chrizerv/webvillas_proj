@@ -1,14 +1,9 @@
 body {
   background-color: #f2f2f2;
 }
-main{
-	width: 50%;
-	margin: 30px auto;
-	background-color: #d2d2d2;
-  
-}
 
-ul {
+
+nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -17,13 +12,11 @@ ul {
   background-color: #f2f2f2;
 }
 
-li {
+nav ul li {
   float: right;
 }
 
-.right { text-align: right; }
-
-li a {
+nav ul li a {
   display: block;
   color: white;
   text-align: center;
@@ -32,10 +25,16 @@ li a {
   color: #777;
 }
 
-/* Change the link color to #111 (black) on hover */
-li a:hover {
+nav ul li a:hover {
   background-color: #cccccc;
 }
+
+.right { text-align: right; }
+
+
+
+/* Change the link color to #111 (black) on hover */
+
 td { padding: 4px; }
 
 .center {
@@ -46,7 +45,7 @@ td { padding: 4px; }
 
 footer {
 	clear:both;
-	margin-top: 100px;
+	margin-top: 150px;
 	
 
 	text-align: center;
