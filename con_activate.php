@@ -1,12 +1,13 @@
 <?php
 
-if (isset($_GET['vfcode'])){
+// Άν δέν υπάρχει vfcode παραμένουμε σιωπηλοί!
+if (isset($_GET['vfcode'])) {
 
 	$vfcode = $_GET['vfcode'];
-
+	// Θεωρούμε ότι κάτι πήγε στραβά στην βάση ή δέν δώθηκε το md5 κατάλληλα!
 	$result= false;
     // To vfcode πρέπει να είναι μορφής MD5 και ΤΙΠΟΤΑ άλλο !
-	if (preg_match('/[[:alnum:]]{32}/', $vfcode) === 1)
+	if (preg_match('/^[[:alnum:]]{32}/', $vfcode) === 1)
 		{
 			require('db_params.php');
   				try {
@@ -36,7 +37,8 @@ if (isset($_GET['vfcode'])){
 		}
 		if ($result)
 			echo 'Ο λογαριασμός σας ενεργοποιήθηκε επιτυχώς';
-
+		else
+			echo 'Αποτυχία ενεργοποίησης λογαριασμού';
 
 
 }
