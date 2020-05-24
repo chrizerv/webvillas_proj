@@ -22,7 +22,7 @@
 
 			var finalResults = new Array(3).fill(false);
 			
-
+			
 			function validateField(field){
 				
 				switch(field) {
@@ -35,7 +35,7 @@
 						if ( !acceptedChars.test(username.value) ){
 							finalResults[0] = false;
 							username.style.border="solid 2px red";
-							alert('wrong username');
+							alert('To username μπορεί να περιέχει μόνο τους λατινικούς χαρακτήρες  A-Z, a-z, 0-9, _(κάτω παύλα) !');
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
@@ -54,7 +54,7 @@
 						if ( !acceptedChars.test(password.value) ){
 							finalResults[1] = false;
 							password.style.border="solid 2px red";
-							alert('wrong password');
+							alert('Το password πρέπει να περιέχει λατινικούς χαρακτήρες με πεζά(a-z) ΚΑΙ κεφαλαία(A-Z) ΚΑΙ αριθμούς(0-9) !');
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
@@ -74,7 +74,7 @@
 						if ( !acceptedChars.test(email.value) ){
 							finalResults[2] = false;
 							email.style.border="solid 2px red";
-							alert('wrong email');
+							alert('Λανθασμένο email !');
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
@@ -84,11 +84,31 @@
 
 					break;
 
+					default:
+
 
 				}	
 			}
+
+			function validateForm(){
+				
+				var response = grecaptcha.getResponse();
+
+				  if( finalResults.includes(false) || response.length === 0) 
+				  { 
+				    //reCaptcha not verified
+				    alert("Υπάρχουν πεδία που δεν ελέγχθηκαν επιτυχώς!"); 
+				    return false;
+				  }
+
+				  return true;
+
+			}
+
 			 
 		</script>
+			
+			
 	</head>
   	<body>
 		<div id="container">
@@ -96,6 +116,17 @@
 			<?php require('page_parts/part_header2.php'); ?>
 			<a href="index.php">Αρχική</a>
     		<main>
+    			<?php 
+    				if (isset($_GET['msg'])){
+    					$msg = $_GET['msg'];
+
+    					if ($msg == 0){ ?>
+    						<p style="text-align: center; color: red;">Αποτυχία εγγραφής. Δοκιμάστε ξανά!</p>
+    					<?php  
+    					}
+					}
+
+    			?>
 
        			<form name="registerForm" action="./con_register.php" method="post" onsubmit="return validateForm()">
 					<table style="width: 100%;">
