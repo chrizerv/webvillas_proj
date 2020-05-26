@@ -4,12 +4,14 @@ require 'functions.php';
 
 
 //Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία!
-if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-recaptcha-response']) ) {
+if ( isset($_POST['username'], $_POST['password'], $_POST['conpassword'], $_POST['email'], $_POST['g-recaptcha-response']) ) {
 	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$email = $_POST['email'];
+	$conpassword = $_POST['conpassword'];
+  $email = $_POST['email'];
 	$captcha_token = $_POST['g-recaptcha-response'];
+
 
 // Άν έστω και κάτι απο το input δέν είναι όπως το θέλουμε, δέν δεχόμαστε περαιτέρω διαπραγματέυσεις 
 // και δέν λέμε ούτε το γιατί, δεδομένου ότι υπάρχει client-side validation!
@@ -21,6 +23,10 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-re
 //το password να περιέχει αυστηρά αριθμούς KAI μικρά KAI κεφαλαία, με μήκος>8 και <128.. 
 	
   if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}$/', $password) !== 1)
+    exit(-1);
+
+// Άν επιβεβαίωσε σωστά το password
+  if ($conpassword !== $password)
     exit(-1);
 
   
@@ -76,7 +82,8 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-re
 
       } catch (PDOException $e) {
 
-      		echo $e->getMessage();
+        $result=false;
+      	//	echo $e->getMessage();
       }
     
     //Στέλνουμε τους αριθμούς 0,1,2 στις σελίδες register/login ανάλογα με το τί συνέβει ώστε να δείξουμε και τα ανάλογα μηνύματα.
@@ -85,7 +92,7 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-re
     // 2 - Άν πέτυχαν όλα.
 
     if (!$result){
-      header ('Location :register.php?msg=0');
+      header ('Location: register.php?msg=0');
       exit(-1);
     }
     else{
@@ -93,18 +100,18 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['g-re
       if ( !send_mail($email,
       				'WebVillas - Account Activation',
       				'Click <a href=http://172.17.0.3/kokor_2020/con_activate.php?vfcode='.$random_vfcode.'>here</a> to activate your account.') ){
-        header ('Location :login.php?msg=1');
+        header ('Location: login.php?msg=1');
         exit(-1);
       }
       else{
 
-        header ('Location :login.php?msg=2');
+        header ('Location: login.php?msg=2');
         exit(-1);	
       }
     
-}   
+    }   
 
-
+}
 
 
 ?>

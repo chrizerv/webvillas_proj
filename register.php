@@ -20,7 +20,7 @@
 
 		<script type="text/javascript">
 
-			var finalResults = new Array(3).fill(false);
+			var finalResults = new Array(4).fill(false);
 			
 			
 			function validateField(field){
@@ -35,7 +35,7 @@
 						if ( !acceptedChars.test(username.value) ){
 							finalResults[0] = false;
 							username.style.border="solid 2px red";
-							alert('To username μπορεί να περιέχει μόνο τους λατινικούς χαρακτήρες  A-Z, a-z, 0-9, _(κάτω παύλα) !');
+							alert('To username πρέπει να περιέχει τουλάχιστον 8 λατινικούς χαρακτήρες, οι οποίοι ανήκουν στα σύνολα A-Z, a-z, 0-9, _(κάτω παύλα) ');
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
@@ -54,7 +54,7 @@
 						if ( !acceptedChars.test(password.value) ){
 							finalResults[1] = false;
 							password.style.border="solid 2px red";
-							alert('Το password πρέπει να περιέχει λατινικούς χαρακτήρες με πεζά(a-z) ΚΑΙ κεφαλαία(A-Z) ΚΑΙ αριθμούς(0-9) !');
+							alert('Το password πρέπει να περιέχει τουλάχιστον 8 λατινικούς χαρακτήρες με πεζά(a-z) ΚΑΙ κεφαλαία(A-Z) ΚΑΙ αριθμούς(0-9) ');
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
@@ -84,6 +84,24 @@
 
 					break;
 
+					case 'conpassword':
+
+						var password=document.getElementById("password");
+						var conpassword=document.getElementById("conpassword");
+
+						if ( (password.value != "") && (conpassword.value === password.value) ){
+							finalResults[3] = true;
+							conpassword.style.border="solid 2px green";
+							
+							
+						}else{
+							finalResults[3] = false;
+							conpassword.style.border="solid 2px red";
+							alert('Αναντιστοιχία των passwords. ');
+						}
+
+					break;
+
 					default:
 
 
@@ -96,7 +114,7 @@
 
 				  if( finalResults.includes(false) || response.length === 0) 
 				  { 
-				    //reCaptcha not verified
+				    
 				    alert("Υπάρχουν πεδία που δεν ελέγχθηκαν επιτυχώς!"); 
 				    return false;
 				  }
@@ -144,6 +162,13 @@
 					       		<td>
 					          		<input type="password" name="password" id="password" size="20" maxlength="128"
 					          			onblur="validateField('password');"/>
+					        	</td>
+					      	</tr>
+					      	<tr>
+					        	<td class="right"><strong>confirm password</strong>:</td>
+					       		<td>
+					          		<input type="password" name="conpassword" id="conpassword" size="20" maxlength="128"
+					          			onblur="validateField('conpassword');" />
 					        	</td>
 					      	</tr>
 					      	<tr>

@@ -23,6 +23,18 @@
 			<?php require('page_parts/part_header2.php'); ?>
 			<a href="index.php">Αρχική</a>
     		<main>
+    			<?php 
+    				if (isset($_GET['msg'])){
+    					$msg = $_GET['msg'];
+
+    					if ($msg == 1){ ?>
+    						<p style="text-align: center; color: green;">Η εγγραφή σας ήταν επιτυχής.</p>
+    						<p style="text-align: center; color: red;">Η αποστολή email για την ενεργοποίηση του λογαριασμού σας δέν ήτανε επιτυχής. Συνδεθείτε και προσπαθήστε ξανά.</p>
+    					<?php  
+    					}
+					}
+
+    			?>
 
        			<form action="/action_page.php">
 					<table style="width: 100%;">
