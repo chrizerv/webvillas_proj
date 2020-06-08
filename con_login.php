@@ -1,10 +1,10 @@
 <?php
+session_start();
+//require 'functions.php';
 
-require 'functions.php';
 
-
-//Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία!
-if ( isset($_POST['username'], $_POST['password'] ) ) {
+//Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία και δεν υπάρχει session !
+if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password'] ) ) {
 	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
@@ -13,7 +13,7 @@ if ( isset($_POST['username'], $_POST['password'] ) ) {
 
 //username να περιέχει 0-9, A-Z, a-z, _  με μήκος>8 και <20..  
 	if ( preg_match('/\w{8,20}/', $username) !== 1 )
-		terminate();
+		exit(-1);
 
 // password να περιέχει αυστηρά αριθμούς, μικρά, κεφαλαία, με μήκος>8 και <20.. 
 	if ( 
@@ -23,8 +23,12 @@ if ( isset($_POST['username'], $_POST['password'] ) ) {
 	      strlen($password) < 8 	||
 	      strlen($password) > 20
 	   )
-		terminate();
+		exit(-1);
 
+// Θεωρούμε ότι ο λογαριασμός δέν έχει ενεργοποιηθεί.
+$activated = false;
+// Θεωρούμε ότι δέν έχει γίνει πιστοποίηση χρήστη.
+$authenticated = false;
 
 require('db_params.php');
   try {
@@ -47,10 +51,22 @@ require('db_params.php');
       $result= $statement->execute( array(       ':username'=>$username,
                                                  ':password'=>$enc_password
                                              								));
-   	  if ($record = $statement -> fetch()){
-   	  	if (!$record['verified'])
-   	  		echo 'Ο λογαριασμός σας δέν είναι ενεργοποιημένος!';
-   	  } 
+
+      
+     if ($record = $statement -> fetch()){
+
+        $authenticated = true;
+        $_SESSION['username'] = $username;
+        if (!$record['verified']){
+            $activated = false;
+            $_SESSION['email'] = $record['email'];
+            $_SESSION['verified'] = $record['verified'];
+          }else
+            $activated = true;
+    }else
+        $authenticated = false;
+   
+
      
 
      $statement->closeCursor();
@@ -58,10 +74,25 @@ require('db_params.php');
       } catch (PDOException $e) {
       		echo $e->getMessage();
       }
-     
+
+if (!$authenticated){
+    header("Location: login.php?msg=3");
+    exit(-1);
+}
+
+
+if ($activated) {
+    header("Location: index.php");
+    exit(-1);
+  }
+else {
+    header("Location: login.php?msg=4");
+    exit(-1);
+  }
+ 
+
 
 
 }
-
 
 ?>

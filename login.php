@@ -31,12 +31,26 @@
     						<p style="text-align: center; color: green;">Η εγγραφή σας ήταν επιτυχής.</p>
     						<p style="text-align: center; color: red;">Η αποστολή email για την ενεργοποίηση του λογαριασμού σας δέν ήτανε επιτυχής. Συνδεθείτε και προσπαθήστε ξανά.</p>
     					<?php  
+    					} elseif ($msg == 2){ ?>
+    						<p style="text-align: center; color: green;">Η εγγραφή σας ήταν επιτυχής.</p>
+    						<p style="text-align: center; color: green;">Σας έχει σταλεί email για την ενεργοποίηση του λογαριασμού σας. </p> 
+    					<?php
+    					} elseif ($msg == 3){ ?>
+    						<p style="text-align: center; color: red;"> Λανθασμένα στοιχεία σύνδεσης. Δοκιμάστε ξανά </p>
+					
+						<?php
+						} elseif ($msg == 4){ ?>
+    					
+    						<p style="text-align: center; color: brown;">Ο λογαριασμός σας είναι απενεργοποιημένος.</p>
+    						<p style="text-align: center;"><a href="#">Ξαναστείλε email</a></p>
+
+
+    					<?php
     					}
 					}
-
     			?>
 
-       			<form action="/action_page.php">
+       			<form action="./con_login.php" method="post">
 					<table style="width: 100%;">
 						<tbody>
 							<tr>
@@ -56,7 +70,7 @@
 					      	<tr>
 								<td>&nbsp;</td>
 								<td>
-									<input name="reset" type="reset" id="reset" value="Επαναφορά" />  
+									  
 								  	<input type="submit" value="Σύνδεση">
 								</td>
 							</tr>        

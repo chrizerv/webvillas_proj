@@ -50,6 +50,9 @@
 						
 						var password=document.getElementById("password");
 				 		var acceptedChars = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}$/);
+				 		var conpassword=document.getElementById("conpassword");
+
+						
 				 		
 						if ( !acceptedChars.test(password.value) ){
 							finalResults[1] = false;
@@ -58,9 +61,20 @@
 							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
   							
 						}else{
+
 							finalResults[1] = true;
 							password.style.border="solid 2px green";
+
+							if ( (conpassword.value != "") && (conpassword.value !== password.value) ){
+								finalResults[1] = false;
+								password.style.border="solid 2px red";
+								alert('Αναντιστοιχία των passwords. ');
+							}
 						}
+
+
+							
+							
 
 
 					break;
