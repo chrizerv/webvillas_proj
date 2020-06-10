@@ -9,6 +9,7 @@ if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
+
 // Άν έστω και κάτι απο το input δέν είναι όπως το θέλουμε, δέν δεχόμαστε περαιτέρω διαπραγματέυσεις.
 
 //username να περιέχει 0-9, A-Z, a-z, _  με μήκος>8 και <20..  
@@ -52,17 +53,13 @@ require('db_params.php');
                                                  ':password'=>$enc_password
                                              								));
 
-      
+     // Ελέγχουμε για πιστοποίηση και ενεργοποίηση λογιαριασμού. 
+      // Session αποκτά μόνο ο χρήστης που έχει ενεργοποιημένο λογαριασμό!
      if ($record = $statement -> fetch()){
 
         $authenticated = true;
         $_SESSION['username'] = $username;
-        if (!$record['verified']){
-            $activated = false;
-            $_SESSION['email'] = $record['email'];
-            $_SESSION['verified'] = $record['verified'];
-          }else
-            $activated = true;
+        $activated = $record['verfied'];
     }else
         $authenticated = false;
    
@@ -75,6 +72,7 @@ require('db_params.php');
       		echo $e->getMessage();
       }
 
+// Ανάλογα με τό τι είναι κάποιος . γίνεται ανακατεύθυνση με το μήνυμα που το αναλογεί!
 if (!$authenticated){
     header("Location: login.php?msg=3");
     exit(-1);

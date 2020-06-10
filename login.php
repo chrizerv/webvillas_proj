@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="el">
 	<head>
@@ -39,12 +43,23 @@
     						<p style="text-align: center; color: red;"> Λανθασμένα στοιχεία σύνδεσης. Δοκιμάστε ξανά </p>
 					
 						<?php
-						} elseif ($msg == 4){ ?>
-    					
-    						<p style="text-align: center; color: brown;">Ο λογαριασμός σας είναι απενεργοποιημένος.</p>
-    						<p style="text-align: center;"><a href="#">Ξαναστείλε email</a></p>
+						} elseif ($msg == 4){ 
 
+								//Δέν θέλουμε να διατηρήσουμε session σε χρήστη που ο λογαριασμός του είναι απενεργοποιημένος.
+							    // Βλέπουμε ποιος είναι και του δίνουμε την δυνατότητα να ξανα λάβει  email .
+								$user = "";
+								if (isset($_SESSION['username'])){
 
+									$user = $_SESSION['username'];
+									session_destroy();
+
+									?>
+								<p style="text-align: center; color: brown;">Ο λογαριασμός σας είναι απενεργοποιημένος.</p>
+								
+    						    <p style="text-align: center;"><a href="./email_resend.php?user=<?php echo $user ?>">Ξαναστείλε email</a></p>
+
+							 <?php } ?>
+    						
     					<?php
     					}
 					}
