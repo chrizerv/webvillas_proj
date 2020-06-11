@@ -54,15 +54,22 @@ require('db_params.php');
                                              								));
 
      // Ελέγχουμε για πιστοποίηση και ενεργοποίηση λογιαριασμού. 
-      // Session αποκτά μόνο ο χρήστης που έχει ενεργοποιημένο λογαριασμό!
+      // Το σession θα παραμείνει μόνο στον χρήστη που έχει ενεργοποιημένο λογαριασμό!
      if ($record = $statement -> fetch()){
 
         $authenticated = true;
-        $_SESSION['username'] = $username;
-        $activated = $record['verfied'];
-    }else
+        $activated = $record['verified'];
+
+        if ($activated){
+          
+          $_SESSION['username'] = $username;
+
+        }else
+          session_destroy();
+    }else{
         $authenticated = false;
-   
+        session_destroy();
+      }
 
      
 
@@ -84,7 +91,7 @@ if ($activated) {
     exit(-1);
   }
 else {
-    header("Location: login.php?msg=4");
+    header("Location: login.php?msg=4&user=". $username);
     exit(-1);
   }
  
