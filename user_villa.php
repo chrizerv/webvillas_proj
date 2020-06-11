@@ -24,7 +24,7 @@
     		<main>
     			<div id="vildata">
 	    			<h3>Στοιχεία</h3>
-	    			<form action="/action_page.php" method="post">
+	    			<form action="./con_user_villa.php" method="post">
 						<table style="width: 100%;">
 							<tbody>
 								<tr>
@@ -34,25 +34,25 @@
 								<tr>
 									<td class="right">Νομός: </td>
 									<td>				    
-										<select id="country" name="country">
-						      				<option value="australia">Αθηνών</option>
-					      					<option value="canada">Ανατολικής Αττικής</option>
-										    <option value="usa">Δυτικής Αττικής</option>
-									     	<option value="canada">Πειραιά</option>
-										    <option value="usa">Ευβοίας</option>
-											<option value="canada">Ευρυτανίας</option>
-											<option value="usa">Φωκίδας</option>
-										    <option value="canada">Χαλκιδικής</option>
-											<option value="usa">Ημαθίας</option>
-											<option value="usa">Κιλκίς</option>
-											<option value="usa">Πέλλας</option>
-											<option value="usa">Πιερίας</option>
-											<option value="usa">Σερρών</option>
-											<option value="usa">Θεσσαλονίκης</option>
-											<option value="usa">Καρδίτσας</option>
-											<option value="usa">Λάρισας</option>
-											<option value="usa">Μαγνησίας</option>
-											<option value="usa">Τρικάλων</option>
+										<select id="prefecture" name="prefecture">
+						      				<option value="athens">Αθηνών</option>
+					      					<option value="east_att">Ανατολικής Αττικής</option>
+										    <option value="west_att">Δυτικής Αττικής</option>
+									     	<option value="piraeus">Πειραιά</option>
+										    <option value="evias">Ευβοίας</option>
+											<option value="evritanias">Ευρυτανίας</option>
+											<option value="fokidas">Φωκίδας</option>
+										    <option value="chalkidikhs">Χαλκιδικής</option>
+											<option value="imathias">Ημαθίας</option>
+											<option value="kilkis">Κιλκίς</option>
+											<option value="pellas">Πέλλας</option>
+											<option value="pierias">Πιερίας</option>
+											<option value="serrwn">Σερρών</option>
+											<option value="thessalonikhs">Θεσσαλονίκης</option>
+											<option value="karditsas">Καρδίτσας</option>
+											<option value="larissas">Λάρισας</option>
+											<option value="magnisias">Μαγνησίας</option>
+											<option value="trikalwn">Τρικάλων</option>
 									    </select>
 								   	</td>
 								</tr>
@@ -63,12 +63,12 @@
 								<tr>
 									<td class="right">Τηλέφωνο :</td>
 									<td>
-										<input type="tel" id="phone" name="phone" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required>
+										<input type="tel" id="phone" name="phone" >
 									</td>
 								</tr>
 								<tr>
 									<td class="right">Άτομα :</td>
-									<td><input type="number" id="quantity" name="quantity" min="1" max="10"></td>
+									<td><input type="number" id="individuals" name="individuals" min="1" max="10"></td>
 								</tr>
 								<tr>
 									<td class="right">Latitude :</td>
@@ -80,25 +80,25 @@
 								</tr>
 								<tr>
 									<td class="right">Αστέρων :</td>
-				  					<td><input type="number" id="quantity" name="quantity" min="1" max="3"></td>
+				  					<td><input type="number" id="stars" name="stars" min="1" max="3"></td>
 								</tr>
 								<tr>
 									<td class="right">Εξοπλισμός :</td>
 				  					<td>
 				  						<label>
-											<input type="checkbox" id="equipment1" name="equipment1" value="Car">Πισίνα
+											<input type="checkbox" id="equipment1" name="equipment[]" value="pool">Πισίνα
 										</label>
 										<br>
 										<label> 
-											<input type="checkbox" id="equipment2" name="equipment2" value="Boat">Γυμναστήριο
+											<input type="checkbox" id="equipment2" name="equipment[]" value="gym">Γυμναστήριο
 										</label>
 										<br>
 										<label>
-											<input type="checkbox" id="equipment3" name="equipment3" value="Boat">Σάουνα
+											<input type="checkbox" id="equipment3" name="equipment[]" value="sauna">Σάουνα
 										</label>
 										<br>
 										<label>
-											<input type="checkbox" id="equipment4" name="equipment4" value="Boat">Παιδική Χαρά
+											<input type="checkbox" id="equipment4" name="equipment[]" value="playground">Παιδική Χαρά
 										</label>
 				  					</td>
 								</tr>
