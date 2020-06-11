@@ -116,12 +116,12 @@
 
 				<div id="images" style="margin-top: 30px">
 					<h3>Εικόνες</h3>
-					<form action="/action_page.php" method="post" enctype="multipart/form-data">
+					<form action="./con_image_upload.php" method="post" enctype="multipart/form-data">
 						<table style="width: 100%;">
 								<tbody>
 									<tr>
 										<td class="right">Εικόνα :</td>
-										<td><input type="file" id="img" name="img" accept=".jpg, .jpeg"></td>
+										<td><input type="file" id="imgFile" name="imgFile" accept=".jpg, .jpeg"></td>
 									</tr>
 									<tr>
 										<td class="right">Λεζάντα :</td>
