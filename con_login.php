@@ -2,6 +2,7 @@
 session_start();
 //require 'functions.php';
 
+//NA ALLAKSW THN SYMPERIFORA OTAN H MORFH DEN EINAI SWSTH---- 
 
 //Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία και δεν υπάρχει session !
 if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password'] ) ) {

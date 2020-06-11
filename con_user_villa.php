@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['username'])){
+	session_destroy();
+	exit(-1);
+}
+
 
 if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['phone'],
 			$_POST['individuals'], $_POST['latitude'], $_POST['longitude'], $_POST['stars']
@@ -13,7 +20,7 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 	$longitude = $_POST['longitude'];
 	$stars = $_POST['stars'];
 	$equipment = "";
-	$username = "karamitros23";
+	$username = $_SESSION['username'];
 
 	if (isset($_POST['equipment'])){
 		$equipment =  $_POST['equipment'];

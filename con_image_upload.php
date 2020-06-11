@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+//Upload κάνουμε μόνο εγγεγραμμένοι χρήστες. 
+if (!isset($_SESSION['username'])){
+	session_destroy();
+	exit(-1);
+}
+
 
 function guid( $opt = false ){
     if( function_exists('com_create_guid') ){
@@ -25,13 +33,11 @@ function guid( $opt = false ){
 
 
 
-// Να ελένξω άν ο user που προσπαθεί να ανεβάσει εικόνα, έχει όντως villa.
-
 
 	if ( isset( $_FILES['imgFile'], $_FILES['imgFile']['name'], $_POST['caption'] ) ) {
 
 
-		$username='karamitros24';
+		$username= $_SESSION['username'];
 		$caption = $_POST['caption'];
 
 		$filename= $_FILES['imgFile']['name'];
@@ -55,14 +61,9 @@ function guid( $opt = false ){
 
 		$new_filename = guid().'.'.$extension ;
 
-		$copyResult = copy($_FILES['imgFile']['tmp_name'], 'villas_images/'.$new_filename);
+		
 
-
-		 if (!$copyResult) {
-   // header('Location: index.php?msg=ERROR: Η αντιγραφή του προσωρινού αρχείου απέτυχε!');
-    exit(-1);
-  }
-
+$image_result = false;
 
 require('db_params.php');
   try {
@@ -78,14 +79,25 @@ require('db_params.php');
      $pdoObject -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
      //εισαγωγή δεδομένων με prepare
-     $sql='INSERT INTO image (filename, description, villa_idvilla)
+     $sql = ' SELECT * FROM user,villa WHERE user_username=:username';
+
+     $statement = $pdoObject->prepare($sql);
+
+     $villa_result= $statement->execute( array( ':username'=>$username));
+     
+     // Καταχώρηση εικόνας μπορεί να γίνει με την προυπόθεση ότι ο χρήστης έχει καταχωρήσει ήδη την villa του.
+     if ( $record = $statement->fetch() ){
+     	
+     	$idvilla = $record['idvilla']; 
+		$sql='INSERT INTO image (filename, description, villa_idvilla)
             VALUES (:filename, :description, :villa_idvilla)';
 
-      $statement = $pdoObject->prepare($sql);
+      	$statement = $pdoObject->prepare($sql);
       
-      $result= $statement->execute( array(       ':filename'=>$new_filename,
+      	$image_result= $statement->execute( array(       ':filename'=>$new_filename,
                                                  ':description'=>$caption,
-                                                 ':villa_idvilla'=>1 ) );
+                                                 ':villa_idvilla'=>$idvilla ) );
+	}
 
 
       //τερματισμός pdo
@@ -97,6 +109,17 @@ require('db_params.php');
         $result=false;
       		//echo $e->getMessage();
       }
+
+
+      if ($image_result)
+      	$copyResult = copy($_FILES['imgFile']['tmp_name'], 'villas_images/'.$new_filename);
+
+
+		 if (!$copyResult) {
+   // header('Location: index.php?msg=ERROR: Η αντιγραφή του προσωρινού αρχείου απέτυχε!');
+    exit(-1);
+  }
+
 
 
 
