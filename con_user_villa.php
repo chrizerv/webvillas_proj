@@ -19,12 +19,10 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 	$latitude = $_POST['latitude'];
 	$longitude = $_POST['longitude'];
 	$stars = $_POST['stars'];
-	$equipment = "";
+	$equipment = NULL;
 	$username = $_SESSION['username'];
 
-	if (isset($_POST['equipment'])){
-		$equipment =  $_POST['equipment'];
-	}
+
 
 
 	// --------- ΈΛεγχος με regex. Άν κάτι δέν είναι όπως το θέλουμε τερματίζουμε χωρίς εξήγηση, δεδομένου ότι έχουμε client side validation. 
@@ -54,21 +52,26 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 	if ( preg_match('/^[1-3]{1}$/', $stars) !== 1 )
 		exit(-1);
 
+	if (isset($_POST['equipment'])) {
+		$equipment =  $_POST['equipment'];
+	
 	// Εφόσον γνωρίζουμε ότι ο εξοπλισμός είναι συνολικά 4 επιλογές , δέν υφίσταται να μας στείλουν 5. 
-	if (count($equipment) > 4)
-		exit(-1);
+		if (count($equipment) > 4)
+			exit(-1);
 
-	// Εφόσον η μορφή των επιλογών είναι προκαθορισμένη, οτίδήποτε περίεργο τρώει πόρτα :D.
-	for($i=0;$i<count($equipment);$i++)
-		if ( preg_match('/^[a-z]{2,11}$/', $equipment[$i]) !== 1 )
-				exit(-1);
+		// Εφόσον η μορφή των επιλογών είναι προκαθορισμένη, οτίδήποτε περίεργο τρώει πόρτα :D.
+		for($i=0;$i<count($equipment);$i++)
+			if ( preg_match('/^[a-z]{2,11}$/', $equipment[$i]) !== 1 )
+					exit(-1);
 
+		$equipment = implode(",", $equipment);
+	}
 	// ------------------------------------------------------------------------
 
 	print_r($_POST);
 	
 	// Προετιμάζουμε τις επιλογές για να τις εισάγουμε στην μορφή του 'SET' data type της db.
-	$equipment = implode(",", $equipment);
+	
 
 	require('db_params.php');
   try {
