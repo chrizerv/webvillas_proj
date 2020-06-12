@@ -219,6 +219,7 @@
 												?>
 											<tr>
 												<td class="right"><img src="./images/jpg.ico"/></td>
+												<td><a href="./villas_images/<?php echo $images[$i]['filename'] ?> " target="_blank">Προβολή</a> &nbsp;&nbsp;<a href="./con_image_delete.php?id=<?php echo $images[$i]['id']?> ">Διαγραφή</a></td>
 											</tr>	
 
 										<?php 
