@@ -1,4 +1,6 @@
 <?php
+	require './check_loggedin.php';
+	
 	if (isset($_GET['id'])){
 
 		$id = $_GET['id'];

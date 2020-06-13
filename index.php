@@ -1,3 +1,7 @@
+<?php
+	require './check_loggedin.php';
+?>
+
 <!DOCTYPE html>
 <html lang="el">
 	<head>

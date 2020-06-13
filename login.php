@@ -1,5 +1,11 @@
 <?php
-//session_start();
+
+	// Άν ο χρήστης είναι συνδεμένος δέν έχει λόγο να ξανακάνει σύνδεση.
+	session_start();
+	if (isset($_SESSION['username'])){
+		header("Location: index.php");
+	}
+
 ?>
 
 <!DOCTYPE html>

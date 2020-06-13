@@ -1,5 +1,5 @@
 <?php
-	
+	require './check_loggedin.php';
 	session_start();
 
 	if (!isset($_SESSION['username'])){
