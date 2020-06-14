@@ -1,8 +1,6 @@
 <?php
 session_start();
-//require 'functions.php';
 
-//NA ALLAKSW THN SYMPERIFORA OTAN H MORFH DEN EINAI SWSTH---- 
 
 //Προχωράμε άν και μόνο άν, έχουν σταλεί ΟΛΑ τα πεδία και δεν υπάρχει session !
 if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password'] ) ) {
@@ -11,11 +9,16 @@ if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password
 	$password = $_POST['password'];
 
 
-// Άν έστω και κάτι απο το input δέν είναι όπως το θέλουμε, δέν δεχόμαστε περαιτέρω διαπραγματέυσεις.
+
+// Άν έστω και κάτι απο το input δέν είναι όπως το θέλουμε, ισοδυναμεί με λανθασμένα credentials.
 
 //username να περιέχει 0-9, A-Z, a-z, _  με μήκος>8 και <20..  
-	if ( preg_match('/\w{8,20}/', $username) !== 1 )
-		exit(-1);
+	if ( preg_match('/\w{8,20}/', $username) !== 1 ){
+     
+     header("Location: login.php?msg=3");
+     exit(-1);
+		
+  }
 
 // password να περιέχει αυστηρά αριθμούς, μικρά, κεφαλαία, με μήκος>8 και <20.. 
 	if ( 
@@ -24,13 +27,18 @@ if ( !isset($_SESSION['username']) && isset($_POST['username'], $_POST['password
 	      preg_match('@[0-9]@', $password) !== 1 ||
 	      strlen($password) < 8 	||
 	      strlen($password) > 20
-	   )
-		exit(-1);
+	   ){
+        header("Location: login.php?msg=3");
+        exit(-1);
+  }
 
 // Θεωρούμε ότι ο λογαριασμός δέν έχει ενεργοποιηθεί.
 $activated = false;
 // Θεωρούμε ότι δέν έχει γίνει πιστοποίηση χρήστη.
 $authenticated = false;
+
+//Θεωρούμε ότι δέν έχουμε exception error.
+$exception_error = false;
 
 require('db_params.php');
   try {
@@ -46,7 +54,7 @@ require('db_params.php');
      $sql='SELECT * FROM user
            WHERE username=:username AND password=:password';
 
-      $enc_password = crypt($password,'$6$rounds=5000$w6tLIsFTm4PKuXaC$');
+     $enc_password = crypt($password,'$6$rounds=5000$w6tLIsFTm4PKuXaC$');
 
       $statement = $pdoObject->prepare($sql);
       
@@ -55,7 +63,7 @@ require('db_params.php');
                                              								));
 
      // Ελέγχουμε για πιστοποίηση και ενεργοποίηση λογιαριασμού. 
-      // Το σession θα παραμείνει μόνο στον χρήστη που έχει ενεργοποιημένο λογαριασμό!
+      // Το session θα παραμείνει μόνο στον χρήστη που έχει ενεργοποιημένο λογαριασμό!
      if ($record = $statement -> fetch()){
 
         $authenticated = true;
@@ -77,27 +85,32 @@ require('db_params.php');
      $statement->closeCursor();
      $pdoObject = null;
       } catch (PDOException $e) {
-      		echo $e->getMessage();
+      		//echo $e->getMessage();
+         $exception_error = true;
       }
+
+if ($exception_error){
+    echo 'Κάτι πήγε στραβά. Δοκιμάστε ξανά!';
+    exit(-1);
+}
+
 
 // Ανάλογα με τό τι είναι κάποιος . γίνεται ανακατεύθυνση με το μήνυμα που το αναλογεί!
 if (!$authenticated){
-    header("Location: login.php?msg=3");
+    header("Location: login.php?msg=3");  // 3 - λανθασμένα credentials
     exit(-1);
 }
 
 
 if ($activated) {
     header("Location: index.php");
-    exit(-1);
+    exit(1);
   }
 else {
-    header("Location: login.php?msg=4&user=". $username);
-    exit(-1);
+    header("Location: login.php?msg=4&user=". $username); // 4 - απενεργοποιημένος λογαριασμός και δυνατότητα επαναποστολής email 
+    exit(1);
   }
  
-
-
 
 }
 

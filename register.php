@@ -17,136 +17,15 @@
 				}
 
 		</style>
-
-		<script type="text/javascript">
-
-			var finalResults = new Array(4).fill(false);
-			
-			
-			function validateField(field){
+		<script type="text/javascript" src="./js/register.js"></script>
 				
-				switch(field) {
-
-					case 'username':
-						
-						var username=document.getElementById("username");
-				 		var acceptedChars = new RegExp(/^\w{8,20}$/);
-				 		
-						if ( !acceptedChars.test(username.value) ){
-							finalResults[0] = false;
-							username.style.border="solid 2px red";
-							alert('To username πρέπει να περιέχει τουλάχιστον 8 λατινικούς χαρακτήρες, οι οποίοι ανήκουν στα σύνολα A-Z, a-z, 0-9, _(κάτω παύλα) ');
-							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
-  							
-						}else{
-							finalResults[0] = true;
-							username.style.border="solid 2px green";
-						}
-
-
-					break;
-
-					case 'password':
-						
-						var password=document.getElementById("password");
-				 		var acceptedChars = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}$/);
-				 		var conpassword=document.getElementById("conpassword");
-
-						
-				 		
-						if ( !acceptedChars.test(password.value) ){
-							finalResults[1] = false;
-							password.style.border="solid 2px red";
-							alert('Το password πρέπει να περιέχει τουλάχιστον 8 λατινικούς χαρακτήρες με πεζά(a-z) ΚΑΙ κεφαλαία(A-Z) ΚΑΙ αριθμούς(0-9) ');
-							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
-  							
-						}else{
-
-							finalResults[1] = true;
-							password.style.border="solid 2px green";
-
-							if ( (conpassword.value != "") && (conpassword.value !== password.value) ){
-								finalResults[1] = false;
-								password.style.border="solid 2px red";
-								alert('Αναντιστοιχία των passwords. ');
-							}
-						}
-
-
-							
-							
-
-
-					break;
-
-					case 'email':
-
-						
-						var email=document.getElementById("email");
-				 		var acceptedChars = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-				 		
-						if ( !acceptedChars.test(email.value) ){
-							finalResults[2] = false;
-							email.style.border="solid 2px red";
-							alert('Λανθασμένο email !');
-							//style = document.getElementById(element).style;   //αποθήκευσε το τρέχον στυλ
-  							
-						}else{
-							finalResults[2] = true;
-							email.style.border="solid 2px green";
-						}
-
-					break;
-
-					case 'conpassword':
-
-						var password=document.getElementById("password");
-						var conpassword=document.getElementById("conpassword");
-
-						if ( (password.value != "") && (conpassword.value === password.value) ){
-							finalResults[3] = true;
-							conpassword.style.border="solid 2px green";
-							
-							
-						}else{
-							finalResults[3] = false;
-							conpassword.style.border="solid 2px red";
-							alert('Αναντιστοιχία των passwords. ');
-						}
-
-					break;
-
-					default:
-
-
-				}	
-			}
-
-			function validateForm(){
-				
-				var response = grecaptcha.getResponse();
-
-				  if( finalResults.includes(false) || response.length === 0) 
-				  { 
-				    
-				    alert("Υπάρχουν πεδία που δεν ελέγχθηκαν επιτυχώς!"); 
-				    return false;
-				  }
-
-				  return true;
-
-			}
-
-			 
-		</script>
-			
-			
 	</head>
   	<body>
 		<div id="container">
 
 			<?php require('page_parts/part_header2.php'); ?>
-			<a href="index.php">Αρχική</a>
+			
+
     		<main>
     			<?php 
     				if (isset($_GET['msg'])){

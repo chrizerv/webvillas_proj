@@ -25,12 +25,12 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['conpassword'], $_POST
   if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,128}$/', $password) !== 1)
     exit(-1);
 
-// Άν επιβεβαίωσε σωστά το password
+// Άν επιβεβαιώθηκε σωστά το password
   if ($conpassword !== $password)
     exit(-1);
 
   
-// το email να είναι email και να μήν ξεφεύγει πάνω απο 254 :D !	
+// το email να είναι email και να μήν ξεφεύγει πάνω απο 254 σε μήκος :D !	
 	if ( !filter_var($email, FILTER_VALIDATE_EMAIL) ||  strlen($email) > 254 )
 		exit(-1);
 
@@ -64,7 +64,7 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['conpassword'], $_POST
      //Για μεγαλύτερη σιγουριά βάζουμε να 'πετάει' exception σε οτιδήποτε πήγε στραβά.
      $pdoObject -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-     //εισαγωγή δεδομένων με prepare
+     
      $sql='INSERT INTO user (username, password, email, vfcode)
             VALUES (:username, :password, :email, :vfcode)';
 
@@ -82,7 +82,8 @@ if ( isset($_POST['username'], $_POST['password'], $_POST['conpassword'], $_POST
 
       } catch (PDOException $e) {
 
-        $result=false;
+        // Συμπεριλαμβάνουμε και το exception στο result.
+         $result=false;
       	//	echo $e->getMessage();
       }
     

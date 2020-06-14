@@ -32,7 +32,9 @@ if (isset($_GET['vfcode'])) {
 			     $statement->closeCursor();
 			     $pdoObject = null;
 			      } catch (PDOException $e) {
-			      		echo $e->getMessage();
+			      		// Συμπεριλαμβάνουμε και το exception στο result.
+			      		$result = false;
+			      		//echo $e->getMessage();
 			      }
 		}
 		if ($result)

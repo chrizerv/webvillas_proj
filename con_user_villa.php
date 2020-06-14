@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+//Μόνο συνδεδεμένος χρήστης μπορεί να καταχωρήσει αγγελία βίλας.
 if (!isset($_SESSION['username'])){
 	session_destroy();
 	exit(-1);

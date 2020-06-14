@@ -31,7 +31,9 @@
 		<div id="container">
 
 			<?php require('page_parts/part_header2.php'); ?>
-			<a href="index.php">Αρχική</a>
+
+			
+			
     		<main>
     			<?php 
     				if (isset($_GET['msg'])){
@@ -55,6 +57,8 @@
 								$user = "";
 
 								if (isset($_GET['user'])){
+
+									//user να περιέχει 0-9, A-Z, a-z, _  με μήκος>8 και <20.. 
 									if ( preg_match('/^\w{8,20}$/', $_GET['user']) == 1 )
 										$user = $_GET['user'];
 
@@ -65,7 +69,6 @@
 								
     						    <p style="text-align: center;"><a href="./email_resend.php?user=<?php echo $user ?>">Ξαναστείλε email</a></p>
 
-							 
     						
     					<?php
     					}
@@ -78,15 +81,13 @@
 							<tr>
 					        	<td class="right" ><strong>username</strong>:</td>
 					        	<td>
-					      			<input type="text" name="username" id="username" size="25" maxlength="25" 
-					           			onfocus="highlightOn('username');" onblur="highlightOff('username');" />
+					      			<input type="text" name="username" id="username" size="25" maxlength="25" />
 					        	</td>
 					      	</tr>
 					      	<tr>
 					        	<td class="right"><strong>password</strong>:</td>
 					       		<td>
-					          		<input type="password" name="password" id="password" size="25" maxlength="25"
-					                 onfocus="highlightOn('password');" onblur="highlightOff('password');" />
+					          		<input type="password" name="password" id="password" size="25" maxlength="25"/>
 					        	</td>
 					      	</tr>
 					      	<tr>
