@@ -2,15 +2,18 @@
 	require './check_loggedin.php';
 	session_start();
 
+	// Την σελίδα της βίλας μπορούν να την δούν μόνο συνδεδεμένοι χρήστες.
 	if (!isset($_SESSION['username'])){
 		session_destroy();
 		header('Location: login.php');
 		exit(-1);
 	}
 
+	// Ανάλογα με το άν ο χρήστης έχει δημιουργήσει ή όχι μια αγγελία βίλας , αλλάζει η λειτουργία της φόρμας μέσω του mode.
 	$mode = "insert";
 	$username = $_SESSION['username'];
 	
+	// Σε περίπτωση που ο χρήστης δέν έχει καταχωρημένη βίλα , εμφανίζουμε το 'τίποτα' μέσα στα πεδία.
 	$title = '';
 	$prefecture = '';
 	$address = '';
@@ -114,7 +117,7 @@
     		<main>
     			<div id="vildata">
 	    			<h3>Στοιχεία</h3>
-	    			<form action="./con_user_villa.php" method="post">
+	    			<form action="./con_user_villa.php?mode=<?php echo $mode; ?>" method="post">
 						<table style="width: 100%;">
 							<tbody>
 								<tr>
@@ -198,7 +201,11 @@
 									<td>&nbsp;</td>
 								  	<td>
 								  		<input name="reset" type="reset" id="reset" value="Επαναφορά" />  
-								  		<input type="submit" value="Καταχώρηση">
+								  		<input type="submit" value="<?php 
+								  										if ($mode === 'insert') 
+								  											echo 'Καταχώρηση'; 
+								  										elseif($mode === 'update')
+								  											echo 'Ενημέρωση'; ?>">
 								  	</td>
 								</tr>
 							</tbody>
@@ -233,11 +240,12 @@
 										</tr>
 										<tr>
 											<td class="right">Λεζάντα :</td>
-											<td><input type="text" id="caption" name="caption"></td>
+											<td><input type="text" id="caption" name="caption" size="40" title="Δεν επιτρέπεται να ξεκινά με κενά." pattern="^[^ \t\n\f].+" required> </td>
 										</tr>
 									 	<tr>
 									 		<td>&nbsp;</td>
 											<td><input type="submit" value="Upload"></td>
+											<td><span>max size: 500KB</span></td>
 										</tr>
 									</tbody>
 							</table>

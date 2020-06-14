@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-//Upload κάνουμε μόνο εγγεγραμμένοι χρήστες. 
+//Upload κάνουνε μόνο συνδεδεμένοι χρήστες. 
 if (!isset($_SESSION['username'])){
 	session_destroy();
 	exit(-1);
 }
 
-
+// random unique number
 function guid( $opt = false ){
     if( function_exists('com_create_guid') ){
         if( $opt ){ return com_create_guid(); }
@@ -32,11 +32,9 @@ function guid( $opt = false ){
 
 
 
-
-
 	if ( isset( $_FILES['imgFile'], $_FILES['imgFile']['name'], $_POST['caption'] ) ) {
 
-
+		// Χρησιμοποιούμε το username απο το SESSION για να βρούμε την βίλα και την εικόνα του συγκεκριμένου χρήστη.
 		$username= $_SESSION['username'];
 		$caption = $_POST['caption'];
 
@@ -51,12 +49,13 @@ function guid( $opt = false ){
 		$max_size=500;  //in KB
 		$size=filesize($_FILES['imgFile']['tmp_name']);   //σε bytes!
 		
-		if ( $size>= $max_size*1024 ) {
-		   // header('Location: index.php?msg=ERROR: Το αρχείο είναι μεγαλύτερο από το όριο!');
+		if ( $size>= $max_size*1024 ){
+			echo 'Η εικόνα δέν πρέπει να ξεπερνά τα 500ΚΒ';
 		    exit(-1);
-		  }
-		//Εδώ η κατάσταση είναι λίγο δίκοπο μαχαίρι , διότι δέν μπορούμε να στερήσουμε απο τον χρήση τα σημεία στίξης.  
-		if ( preg_match('/^[\w\p{Greek}0-9\s[:punct:]]+$/u', $caption) !== 1 )
+		}
+
+		//H εικόνα πρέπει να έχει λεζάντα. 
+		if ( preg_match('/^[^ \t\n\f].+/u', $caption) !== 1 )
 			exit(-1);
 
 		$new_filename = guid().'.'.$extension ;
@@ -64,6 +63,8 @@ function guid( $opt = false ){
 		
 
 $image_result = false;
+// Θεωρούμε ότι δέν έχουμε exception error
+$result = true;
 
 require('db_params.php');
   try {
@@ -85,7 +86,7 @@ require('db_params.php');
 
      $villa_result= $statement->execute( array( ':username'=>$username));
      
-     // Καταχώρηση εικόνας μπορεί να γίνει με την προυπόθεση ότι ο χρήστης έχει καταχωρήσει ήδη την villa του.
+     // Καταχώρηση εικόνας μπορεί να γίνει υπο την προυπόθεση ότι ο χρήστης έχει καταχωρήσει ήδη την villa του.
      if ( $record = $statement->fetch() ){
      	
      	$idvilla = $record['idvilla']; 
@@ -110,17 +111,22 @@ require('db_params.php');
       		//echo $e->getMessage();
       }
 
+      if (!$result){
+      	echo 'Κάτι πήγε στραβά. Δοκιμάστε αργότερα!';
+      	exit(-1);
+      }
 
+      // Άν δημιουργήθηκε η εγγραφή με τα metadata της εικόνας , τότε αντιγράφεται και η ίδια.
       if ($image_result)
       	$copyResult = copy($_FILES['imgFile']['tmp_name'], 'villas_images/'.$new_filename);
 
-
-		 if (!$copyResult) {
-   // header('Location: index.php?msg=ERROR: Η αντιγραφή του προσωρινού αρχείου απέτυχε!');
-    exit(-1);
-  }
-
-
+      if($copyResult){
+      		header('Location: user_villa.php');
+      		exit(1);
+      }else {
+   			echo 'Δέν ήταν δυνατή η αντιγραφή της εικόνας';
+    		exit(-1);
+	  }
 
 
 	}

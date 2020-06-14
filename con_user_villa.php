@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])){
 }
 
 
-if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['phone'],
+if (isset( $_GET['mode'], $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['phone'],
 			$_POST['individuals'], $_POST['latitude'], $_POST['longitude'], $_POST['stars']
 			)) {
 
@@ -25,7 +25,7 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 	$equipment = NULL;
 	$username = $_SESSION['username'];
 
-
+	$mode = $_GET['mode'];
 
 
 	// --------- ΈΛεγχος με regex. Άν κάτι δέν είναι όπως το θέλουμε τερματίζουμε χωρίς εξήγηση, δεδομένου ότι έχουμε client side validation. 
@@ -55,6 +55,10 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 
 	// Τα αστέρια μια βίλας μπορούν να είναι απο 1 μέχρι 3. 
 	if ( preg_match('/^[1-3]{1}$/', $stars) !== 1 )
+		exit(-1);
+
+	// Άν το mode δέν είναι ούτε update αλλά ούτε και instert, κάτι περίεργο συμβαίνει.
+	if ($mode !== 'update' && $mode !== 'insert')
 		exit(-1);
 
 	// Ελέγχουμε άν επιλέχθηκε εξοπλισμός.
@@ -91,9 +95,16 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
      //Για μεγαλύτερη σιγουριά βάζουμε να 'πετάει' exception σε οτιδήποτε πήγε στραβά.
      $pdoObject -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-     //εισαγωγή δεδομένων με prepare
-     $sql='INSERT INTO villa (title, prefecture, address, phone, individuals, latitude, longitude, stars, equipment, user_username)
+     // Ανάλογα με το mode κάνουμε και το κατάλληλο sql query!
+     if ($mode === 'insert')
+		$sql='INSERT INTO villa (title, prefecture, address, phone, individuals, latitude, longitude, stars, equipment, user_username)
             VALUES (:title, :prefecture, :address, :phone, :individuals, :latitude, :longitude, :stars, :equipment, :username)';
+     
+     elseif($mode === 'update') 
+     	$sql='UPDATE villa 
+     		  SET title=:title, prefecture=:prefecture, address=:address, phone=:phone, individuals=:individuals, latitude=:latitude, longitude=:longitude, stars=:stars, equipment=:equipment
+     		  WHERE user_username=:username'; //Βάλαμε το username στο where διότι γνωρίζουμε ότι κάθε χρήστης έχει ΜΟΝΟ μία βίλα.
+
 
       $statement = $pdoObject->prepare($sql);
       

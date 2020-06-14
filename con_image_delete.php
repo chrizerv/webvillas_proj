@@ -1,9 +1,8 @@
 <?php
 
-	
 session_start();
 
- 
+// Εικόνα μπορεί να διαγράψει μόνο συνδεδεμένος χρήστης. 
 if (!isset($_SESSION['username'])){
 	session_destroy();
 	exit(-1);
@@ -11,12 +10,15 @@ if (!isset($_SESSION['username'])){
 
 if (isset($_GET['id'])){
 
+	//Χρησιμοποιούμε το id της εικόνας προς διαγραφή και το username( του session) ώστε να βρούμε την εικόνα του χρήστη.
 	$imgID = $_GET['id'];
 	$username = $_SESSION['username'];
 
+	// Η παράμετρος id πρέπει να είναι αριθμός!
 	if ( preg_match('/^\d+$/', $imgID) !== 1 )
 		exit(-1);
 
+	//Θεωρούμε ότι δέν διαγράφηκε η εικόνα.
 	$delete_result = false;
 	require('db_params.php');
   try {
@@ -63,7 +65,12 @@ if (isset($_GET['id'])){
         $result=false;
       	//	echo $e->getMessage();
       }
-  
+  	
+  	  if(!$result){
+  	  	echo 'Κάτι πήγε στραβά. Δοκιμάστε ξανά αργότερα!';
+  	  	exit(-1);
+  	  }
+
       if($delete_result){
       	header('Location: user_villa.php');
       	exit(1);
