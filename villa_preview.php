@@ -102,6 +102,18 @@
 		<title><?php echo htmlspecialchars($title); ?></title>
 		<link rel="stylesheet" href="css/style.css">
 		<link href="./dist/css/lightbox.css" rel="stylesheet" />
+
+		<style type="text/css">
+			
+			main {
+					
+					margin-left: 1em ;
+					
+				}
+
+		</style>
+
+
 	</head>
   	<body>
 		<div id="container">

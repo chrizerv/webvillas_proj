@@ -27,59 +27,61 @@
 			<?php require('page_parts/part_header.php'); ?>
 			
     		<main>
-    			<form action="/action_page.php">
+    			<form action="./search_results.php" method="GET">
 					<table style="width: 100%;">
 						<tbody>
 							<tr>
 								<td class="right">Νομός: </td>
 								<td>				    
-									<select id="country" name="country">
-					      				<option value="australia">Αθηνών</option>
-				      					<option value="canada">Ανατολικής Αττικής</option>
-									    <option value="usa">Δυτικής Αττικής</option>
-								     	<option value="canada">Πειραιά</option>
-									    <option value="usa">Ευβοίας</option>
-										<option value="canada">Ευρυτανίας</option>
-										<option value="usa">Φωκίδας</option>
-									    <option value="canada">Χαλκιδικής</option>
-										<option value="usa">Ημαθίας</option>
-										<option value="usa">Κιλκίς</option>
-										<option value="usa">Πέλλας</option>
-										<option value="usa">Πιερίας</option>
-										<option value="usa">Σερρών</option>
-										<option value="usa">Θεσσαλονίκης</option>
-										<option value="usa">Καρδίτσας</option>
-										<option value="usa">Λάρισας</option>
-										<option value="usa">Μαγνησίας</option>
-										<option value="usa">Τρικάλων</option>
+									<select id="prefecture" name="prefecture">
+										<option disabled selected value> -- Παρακαλώ επιλέξτε -- </option>
+					      				<option value="Αθηνών">Αθηνών</option>
+				      					<option value="Ανατολικής Αττικής">Ανατολικής Αττικής</option>
+									    <option value="Δυτικής Αττικής">Δυτικής Αττικής</option>
+								     	<option value="Πειραιά">Πειραιά</option>
+									    <option value="Ευβοίας">Ευβοίας</option>
+										<option value="Ευρυτανίας">Ευρυτανίας</option>
+										<option value="Φωκίδας">Φωκίδας</option>
+									    <option value="Χαλκιδικής">Χαλκιδικής</option>
+										<option value="Ημαθίας">Ημαθίας</option>
+										<option value="Κιλκίς">Κιλκίς</option>
+										<option value="Πέλλας">Πέλλας</option>
+										<option value="Πιερίας">Πιερίας</option>
+										<option value="Σερρών">Σερρών</option>
+										<option value="Θεσσαλονίκης">Θεσσαλονίκης</option>
+										<option value="Καρδίτσας">Καρδίτσας</option>
+										<option value="Λάρισας">Λάρισας</option>
+										<option value="Μαγνησίας">Μαγνησίας</option>
+										<option value="Τρικάλων">Τρικάλων</option>
 								    </select>
 							   	</td>
 							</tr>
 							<tr>
+								
 								<td class="right">Άτομα :</td>
-								<td><input type="number" id="quantity" name="quantity" min="1" max="10"></td>
+									<td><input type="number" id="individuals" name="individuals" min="1" max="10" size="2"></td>
 							</tr>
 							<tr>
 								<td class="right">Αστέρων :</td>
-			  					<td><input type="number" id="quantity" name="quantity" min="1" max="3"></td>
+			  					<td><input type="number" id="stars" name="stars" min="1" max="3"  size="1"></td>
 							</tr>
 							<tr>
 								<td class="right">Εξοπλισμός :</td>
 			  					<td>
 			  						<label>
-										<input type="checkbox" id="equipment1" name="equipment1" value="Car">Πισίνα
+										<input type="checkbox" id="equipment1" name="equipment[]" value="Πισίνα">Πισίνα
 									</label>
 									<br>
 									<label> 
-										<input type="checkbox" id="equipment2" name="equipment2" value="Boat">Γυμναστήριο
+										<input type="checkbox" id="equipment2" name="equipment[]" value="Γυμναστήριο">Γυμναστήριο
 									</label>
 									<br>
 									<label>
-										<input type="checkbox" id="equipment3" name="equipment3" value="Boat">Σάουνα
+										<input type="checkbox" id="equipment3" name="equipment[]" value="Σάουνα">Σάουνα
 									</label>
 									<br>
 									<label>
-										<input type="checkbox" id="equipment4" name="equipment4" value="Boat">Παιδική Χαρά
+										<input type="checkbox" id="equipment4" name="equipment[]" value="Παιδική Χαρά">Παιδική Χαρά
 									</label>
 			  					</td>
 							</tr>
