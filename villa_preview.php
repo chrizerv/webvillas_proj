@@ -3,6 +3,7 @@
 
 	if (isset($_GET['id'])){
 
+		// Παίρνουμε το id της βίλας και προετοιμάζουμε τα πεδία.
 		$id = $_GET['id'];
 
 		$title = '';
@@ -16,6 +17,12 @@
 		$equipment = NULL;
 		$images = '';
 
+
+		//To id πρέπει να είναι αριθμός.
+		if ( preg_match('/^\d+$/', $id) !== 1 )
+			exit(-1);
+
+		$result = true;
 		require('db_params.php');
   try {
 
@@ -30,7 +37,7 @@
      $pdoObject -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-    
+    // Ανακτούμε τα στοιχεία της εκάστοτε βίλας.
 
      $sql='SELECT * FROM villa WHERE idvilla=:id';
 
@@ -49,6 +56,8 @@
       	$longitude = $villa_record['longitude'];
       	$stars = $villa_record['stars'];
       	$equipment = $villa_record['equipment'];
+
+      	// Ανακτούμε τις εικόνες που ανήνκουν στην εκάστοτε βίλα.
 
       	$sql='SELECT * FROM image WHERE villa_idvilla=:id';
 
@@ -73,11 +82,12 @@
       	//	echo $e->getMessage();
       }
 
-      if (!$villa_record){
+      if (!$result || !$villa_record){
+      	echo 'Κάτι πήγε στραβά. Προσπαθήστε ξανά αργότερα.';
       	exit(-1);
       }
 
-
+      // Άν δέν υπάρχει id , δέν έχει νόημα να δείξει κάτι η σελίδα.
 	}else
 		exit(-1);
 
@@ -89,7 +99,7 @@
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
-		<title><?php echo $title?></title>
+		<title><?php echo htmlspecialchars($title); ?></title>
 		<link rel="stylesheet" href="css/style.css">
 		<link href="./dist/css/lightbox.css" rel="stylesheet" />
 	</head>
@@ -100,8 +110,8 @@
 			
     		<main>
        			<section>
-	       			<h2><?php echo $title; ?></h2>
-	       			<p>Noμός <?php echo $prefecture . ', ' . $address; ?></p>
+	       			<h2><?php echo htmlspecialchars($title); ?></h2>
+	       			<p>Noμός <?php echo htmlspecialchars($prefecture) . ', ' . htmlspecialchars($address); ?></p>
        			</section>
        			
        			<section>
@@ -110,7 +120,7 @@
        					<?php 
        						if ($images !== '')
        							for($i=0;$i<count($images);$i++){ ?>
-									<a href="villas_images/<?php echo $images[$i]['filename']; ?>" data-lightbox="villa_image" data-title="<?php echo $images[$i]['description']; ?>"> <img src="villas_images/<?php echo $images[$i]['filename']; ?>" alt="<?php echo $images[$i]['description']; ?>" width="100" height="100" /></a>
+									<a href="villas_images/<?php echo htmlspecialchars($images[$i]['filename']); ?>" data-lightbox="villa_image" data-title="<?php echo htmlspecialchars($images[$i]['description']); ?>"> <img src="villas_images/<?php echo htmlspecialchars($images[$i]['filename']); ?>" alt="<?php echo htmlspecialchars($images[$i]['description']); ?>" width="100" height="100" /></a>
 									
 						<?php } ?>
 					</div>
@@ -122,16 +132,16 @@
        				<ul>
        					<li>
        						<?php if ($stars > 1) 
-       								echo $stars . ' Αστέρων'; 
+       								echo htmlspecialchars($stars) . ' Αστέρων'; 
        							else 
-       								echo $stars . ' Αστέρα'; 
+       								echo htmlspecialchars($stars) . ' Αστέρα'; 
        						?>
        					</li>
        					<li>
        						<?php if ($individuals > 1) 
-       								echo $individuals . ' Ατόμων'; 
+       								echo htmlspecialchars($individuals) . ' Ατόμων'; 
        							else 
-       								echo $stars . ' Άτομο'; 
+       								echo htmlspecialchars($stars) . ' Άτομο'; 
        						?>
        					</li>
        					<?php if (!is_null($equipment)){
@@ -139,7 +149,7 @@
        						$equipment = explode(",", $equipment);
        						for($i=0;$i<count($equipment);$i++){
 
-       							echo '<li>'.$equipment[$i] . '</li>';
+       							echo '<li>'.htmlspecialchars($equipment[$i]) . '</li>';
 
        							}
        						} 
@@ -149,7 +159,7 @@
        			<hr>
        			<section>
        				<h4>Επικοινωνία</h4>
-       				<p> Τηλέφωνο: <?php echo $phone ?></p>
+       				<p> Τηλέφωνο: <?php echo htmlspecialchars($phone) ?></p>
        			</section>
        			<hr>
 
@@ -160,7 +170,7 @@
 					  width="600"
 					  height="450"
 					  frameborder="0" style="border:0"
-					  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBktTnMIE3XT32Nth-LXa-D9miqspSBYz0&q=<?php echo $latitude.','.$longitude;  ?>"
+					  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBktTnMIE3XT32Nth-LXa-D9miqspSBYz0&q=<?php echo htmlspecialchars($latitude).','.htmlspecialchars($longitude);  ?>"
 					  allowfullscreen>
 					</iframe>
 
