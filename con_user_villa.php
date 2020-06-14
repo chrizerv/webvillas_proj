@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-//Μόνο συνδεδεμένος χρήστης μπορεί να καταχωρήσει αγγελία βίλας.
+//Μόνο συνδεδεμένοι χρήστες μπορούν να καταχωρήσουν αγγελία βίλας.
 if (!isset($_SESSION['username'])){
 	session_destroy();
 	exit(-1);
@@ -12,6 +12,7 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 			$_POST['individuals'], $_POST['latitude'], $_POST['longitude'], $_POST['stars']
 			)) {
 
+
 	$title = $_POST['title'];
 	$prefecture = $_POST['prefecture'];
 	$address = $_POST['address'];
@@ -20,6 +21,7 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 	$latitude = $_POST['latitude'];
 	$longitude = $_POST['longitude'];
 	$stars = $_POST['stars'];
+	// θεωρούμε ότι δέν επιλέχθηκε εξοπλισμός.
 	$equipment = NULL;
 	$username = $_SESSION['username'];
 
@@ -28,31 +30,34 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 
 	// --------- ΈΛεγχος με regex. Άν κάτι δέν είναι όπως το θέλουμε τερματίζουμε χωρίς εξήγηση, δεδομένου ότι έχουμε client side validation. 
 
-    //Aναγνώριση και ελληνικών χαρακτήρων.
-	if ( preg_match('/^[a-zA-Z\p{Greek}0-9\s]{4,255}$/u', $title) !== 1 )
+    //O τίτλος πρέπει να περιέχει κάτι.
+	if ( preg_match('/^[^ \t\n\f].+/u', $title) !==1 )     // Δυστυχώς, δέν μπορούμε να περιορίσουμε τους χαρακτήρες που θέλει να χρησιμοποιήσει ο χρήστης για τον τίτλο του.
 		exit(-1);
 
-	if ( preg_match('/^\w{2,100}$/', $prefecture) !== 1 )
+	// Τους νομούς τους λαμβάνουμε προκαθορισμένα στα Ελληνικά και δέν υπερβαίνουν τους 25 σε πλήθος χαρακτήρες.	
+	if ( preg_match('/^[\p{Greek}\s]{2,25}$/u', $prefecture) !== 1 )
 		exit(-1);
-
-	if ( preg_match('/^[a-zA-Z\p{Greek}0-9\s]{2,100}$/u', $address) !== 1 )
+	// H διεύθυνση πρέπει να περιέχει κάτι.
+	if ( preg_match('/^[^ \t\n\f].+/u', $address) !== 1 )
 		exit(-1);
-
+	// Το τηλέφωνο να είναι 10 νούμερα.
 	if ( preg_match('/^\d{10}$/', $phone) !== 1 )
 		exit(-1);
-
+	// Ο αριθμός ατόμων μπορεί να είναι μέχρι διψήφιος αριθμός.
 	if ( preg_match('/^\d{1,2}$/', $individuals) !== 1 )
 		exit(-1);
-
+	// Οι συντεταγμένες πρέπει να έχουν μορφή ακεραίου ή δεκαδικού
 	if ( preg_match('/^\-?\d+(\.\d+)?$/', $latitude) !== 1 )
 		exit(-1);
 
 	if ( preg_match('/^\-?\d+(\.\d+)?$/', $latitude) !== 1 )
 		exit(-1);
 
+	// Τα αστέρια μια βίλας μπορούν να είναι απο 1 μέχρι 3. 
 	if ( preg_match('/^[1-3]{1}$/', $stars) !== 1 )
 		exit(-1);
 
+	// Ελέγχουμε άν επιλέχθηκε εξοπλισμός.
 	if (isset($_POST['equipment'])) {
 		$equipment =  $_POST['equipment'];
 	
@@ -62,18 +67,17 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
 
 		// Εφόσον η μορφή των επιλογών είναι προκαθορισμένη, οτίδήποτε περίεργο τρώει πόρτα :D.
 		for($i=0;$i<count($equipment);$i++)
-			if ( preg_match('/^[a-z]{2,11}$/', $equipment[$i]) !== 1 )
+			if ( preg_match('/^[\p{Greek}\s]{2,15}$/u', $equipment[$i]) !== 1 )
 					exit(-1);
 
+		// Μετατροπή του array σε comma seperated string για να το εισάγουμε στην μορφή του 'SET' data type της db.
 		$equipment = implode(",", $equipment);
 	}
 	// ------------------------------------------------------------------------
 
-	print_r($_POST);
 	
-	// Προετιμάζουμε τις επιλογές για να τις εισάγουμε στην μορφή του 'SET' data type της db.
 	
-
+	$result = false;
 	require('db_params.php');
   try {
 
@@ -114,11 +118,16 @@ if (isset( $_POST['title'], $_POST['prefecture'], $_POST['address'], $_POST['pho
       } catch (PDOException $e) {
 
         $result=false;
-      	//	echo $e->getMessage();
+      		//echo $e->getMessage();
       }
 
-      if (!$result)
+      if (!$result){
       	echo 'Κάτι πήγε στραβά. Προσπαθήστε ξανά!';
+      	exit (-1);
+      }else{
+      		header('Location: user_villa.php');
+      		exit(1);
+      }
 
 }
 

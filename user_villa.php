@@ -119,76 +119,78 @@
 							<tbody>
 								<tr>
 									<td class="right">Τίτλος :</td>
-									<td><input type="text" id="title" name="title" value="<?php echo $title ?>" ></td>
+									<td><input type="text" id="title" name="title" value="<?php echo $title ?>" size="40"  title="Δεν επιτρέπεται να ξεκινά με κενά"
+        pattern="^[^ \t\n\f].+" required></td>
 								</tr>
 								<tr>
 									<td class="right">Νομός: </td>
 									<td>				    
 										<select id="prefecture" name="prefecture">
-						      				<option value="athens">Αθηνών</option>
-					      					<option value="east_att">Ανατολικής Αττικής</option>
-										    <option value="west_att">Δυτικής Αττικής</option>
-									     	<option value="piraeus">Πειραιά</option>
-										    <option value="evias">Ευβοίας</option>
-											<option value="evritanias">Ευρυτανίας</option>
-											<option value="fokidas">Φωκίδας</option>
-										    <option value="chalkidikhs">Χαλκιδικής</option>
-											<option value="imathias">Ημαθίας</option>
-											<option value="kilkis">Κιλκίς</option>
-											<option value="pellas">Πέλλας</option>
-											<option value="pierias">Πιερίας</option>
-											<option value="serrwn">Σερρών</option>
-											<option value="thessalonikhs">Θεσσαλονίκης</option>
-											<option value="karditsas">Καρδίτσας</option>
-											<option value="larissas">Λάρισας</option>
-											<option value="magnisias">Μαγνησίας</option>
-											<option value="trikalwn">Τρικάλων</option>
+						      				<option value="Αθηνών">Αθηνών</option>
+					      					<option value="Ανατολικής Αττικής">Ανατολικής Αττικής</option>
+										    <option value="Δυτικής Αττικής">Δυτικής Αττικής</option>
+									     	<option value="Πειραιά">Πειραιά</option>
+										    <option value="Ευβοίας">Ευβοίας</option>
+											<option value="Ευρυτανίας">Ευρυτανίας</option>
+											<option value="Φωκίδας">Φωκίδας</option>
+										    <option value="Χαλκιδικής">Χαλκιδικής</option>
+											<option value="Ημαθίας">Ημαθίας</option>
+											<option value="Κιλκίς">Κιλκίς</option>
+											<option value="Πέλλας">Πέλλας</option>
+											<option value="Πιερίας">Πιερίας</option>
+											<option value="Σερρών">Σερρών</option>
+											<option value="Θεσσαλονίκης">Θεσσαλονίκης</option>
+											<option value="Καρδίτσας">Καρδίτσας</option>
+											<option value="Λάρισας">Λάρισας</option>
+											<option value="Μαγνησίας">Μαγνησίας</option>
+											<option value="Τρικάλων">Τρικάλων</option>
 									    </select>
 								   	</td>
 								</tr>
 								<tr>
 									<td class="right">Διεύθυνση :</td>
-									<td><input type="text" id="address" name="address" value="<?php echo $address ?>" ></td>
+									<td><input type="text" id="address" name="address" value="<?php echo $address ?>" size="10" title="Δεν επιτρέπεται να ξεκινά με κενά"
+        pattern="^[^ \t\n\f].+" required></td>
 								</tr>
 								<tr>
 									<td class="right">Τηλέφωνο :</td>
 									<td>
-										<input type="tel" id="phone" name="phone" value="<?php echo $phone ?>"  >
+										<input type="tel" id="phone" name="phone" value="<?php echo $phone ?>"  size="10" title="Όχι πάνω απο 10 ψηφία" pattern="^\d{10}$" required>
 									</td>
 								</tr>
 								<tr>
 									<td class="right">Άτομα :</td>
-									<td><input type="number" id="individuals" name="individuals" min="1" max="10" value="<?php echo $individuals ?>" ></td>
+									<td><input type="number" id="individuals" name="individuals" min="1" max="10" value="<?php echo $individuals ?>" size="2"></td>
 								</tr>
 								<tr>
 									<td class="right">Latitude :</td>
-									<td> <input type="text" name="latitude" value="<?php echo $latitude ?>" ></td>
+									<td> <input type="text" name="latitude" value="<?php echo $latitude ?>" size="4" title="Πρέπει να είναι ακέραιος ή δεκαδικός" pattern="^-?\d+(\.\d+)?$" required></td>
 								</tr>
 								<tr>
 									<td class="right">Longitude :</td>
-									<td> <input type="text" name="longitude" value="<?php echo $longitude ?>" ></td>
+									<td> <input type="text" name="longitude" value="<?php echo $longitude ?>" size="4" title="Πρέπει να είναι ακέραιος ή δεκαδικός" pattern="^-?\d+(\.\d+)?$" required></td>
 								</tr>
 								<tr>
 									<td class="right">Αστέρων :</td>
-				  					<td><input type="number" id="stars" name="stars" min="1" max="3" value="<?php echo $stars ?>" ></td>
+				  					<td><input type="number" id="stars" name="stars" min="1" max="3" value="<?php echo $stars ?>" size="1"></td>
 								</tr>
 								<tr>
 									<td class="right">Εξοπλισμός :</td>
 				  					<td>
 				  						<label>
-											<input type="checkbox" id="equipment1" name="equipment[]" value="pool">Πισίνα
+											<input type="checkbox" id="equipment1" name="equipment[]" value="Πισίνα">Πισίνα
 										</label>
 										<br>
 										<label> 
-											<input type="checkbox" id="equipment2" name="equipment[]" value="gym">Γυμναστήριο
+											<input type="checkbox" id="equipment2" name="equipment[]" value="Γυμναστήριο">Γυμναστήριο
 										</label>
 										<br>
 										<label>
-											<input type="checkbox" id="equipment3" name="equipment[]" value="sauna">Σάουνα
+											<input type="checkbox" id="equipment3" name="equipment[]" value="Σάουνα">Σάουνα
 										</label>
 										<br>
 										<label>
-											<input type="checkbox" id="equipment4" name="equipment[]" value="playground">Παιδική Χαρά
+											<input type="checkbox" id="equipment4" name="equipment[]" value="Παιδική Χαρά">Παιδική Χαρά
 										</label>
 				  					</td>
 								</tr>
