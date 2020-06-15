@@ -55,9 +55,9 @@
 
 	$sql_params = rtrim($sql_params," AND ");
 
-	echo $sql_params;
-	echo '<br>';
-	print_r($prepare_params);
+	//echo $sql_params;
+	//echo '<br>';
+	//print_r($prepare_params);
 
 	
 	
@@ -92,7 +92,7 @@
      
 
      if ($record = $statement->fetchAll()){
-     	echo 'tipota';
+     	
      	$villas_list = $record;
 
      }
@@ -125,6 +125,24 @@
 		<meta http-equiv="Expires" content="0" />
 		<title></title>
 		<link rel="stylesheet" href="css/style.css">
+		<style type="text/css">
+			article {
+				margin: 4em 4em;
+				
+			}
+			article a{
+				display: block;
+				text-decoration: none;
+				color: #6194BC;
+				border: 1px solid;
+ 				padding: 10px;
+  				box-shadow: 10px 10px 5px #aaaaaa;
+
+			}
+			article a:hover {
+ 				 background-color: #cccccc;
+			}
+		</style>
 	</head>
   	<body>
 		<div id="container">
@@ -134,8 +152,10 @@
     		<main>
        			<?php if ($villas_list !== '') {for($i=0;$i<count($villas_list);$i++) {?>
        			<article>
-					<h4><?php echo $villas_list[$i]['title']; ?></h4>
-					<p>Νομός <?php echo $villas_list[$i]['prefecture']; ?></p>
+       				<a href="./villa_preview.php?id=<?php echo $villas_list[$i]['idvilla'];?>" target="_blank">
+						<h4><?php echo $villas_list[$i]['title']; ?></h4>
+						<p>Διεύθυνση: <?php echo $villas_list[$i]['address']; ?></p>
+					</a>
 				</article>
 			<?php } }?>
     		</main>
